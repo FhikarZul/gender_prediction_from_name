@@ -1,7 +1,7 @@
 import 'package:gender_prediction/data/datasource/flexible/dao/history.dart';
 import 'package:realm/realm.dart';
 
-const appId = '...';
+const appId = 'genderprediction-yzmnr';
 
 class AppConfig {
   AppConfiguration appConfiguration = AppConfiguration(

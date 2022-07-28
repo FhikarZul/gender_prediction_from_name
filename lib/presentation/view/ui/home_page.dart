@@ -16,7 +16,11 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: BlocProvider<CheckGenderBloc>(
-        create: (context) => CheckGenderBloc(checkGenderUseCase: locator.get()),
+        create: (context) => CheckGenderBloc(
+          checkGenderUseCase: locator.get(),
+          syncUseCase: locator.get(),
+          insertHistoryUseCase: locator.get(),
+        )..add(CheckGenderEventInitial()),
         child: BlocConsumer<CheckGenderBloc, CheckGenderState>(
           listener: (context, state) {
             if (state.isSuccess) {
@@ -71,17 +75,25 @@ class HomePage extends StatelessWidget {
                                   keyboardType: TextInputType.text,
                                 ),
                               ),
+                              !state.isValidInput
+                                  ? const Text(
+                                      'Nama tidak boleh kosong!',
+                                      style: TextStyle(color: Colors.red),
+                                    )
+                                  : const SizedBox(),
                               const SizedBox(height: 20),
-                              SizedBox(
-                                width: 300,
-                                child: CustomButton(
-                                  label: 'Cek Nama',
-                                  colors: Colors.orangeAccent,
-                                  onPressed: () => context
-                                      .read<CheckGenderBloc>()
-                                      .add(CheckGenderEventSubmit()),
-                                ),
-                              )
+                              state.isValidInput && state.isInitial
+                                  ? SizedBox(
+                                      width: 300,
+                                      child: CustomButton(
+                                        label: 'Cek Nama',
+                                        colors: Colors.orangeAccent,
+                                        onPressed: () => context
+                                            .read<CheckGenderBloc>()
+                                            .add(CheckGenderEventSubmit()),
+                                      ),
+                                    )
+                                  : const SizedBox(),
                             ],
                           ),
                         ),

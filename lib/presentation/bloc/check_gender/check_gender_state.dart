@@ -6,6 +6,7 @@ class CheckGenderState extends Equatable {
   final bool isValidGender;
   final bool isSuccess;
   final bool isLoading;
+  final bool isInitial;
   final String resultGender;
 
   const CheckGenderState({
@@ -15,6 +16,7 @@ class CheckGenderState extends Equatable {
     required this.isLoading,
     required this.isValidInput,
     required this.resultGender,
+    required this.isInitial,
   });
 
   const CheckGenderState.initial()
@@ -23,6 +25,7 @@ class CheckGenderState extends Equatable {
         isValidInput = true,
         isSuccess = false,
         isLoading = false,
+        isInitial = false,
         resultGender = '';
 
   CheckGenderState copyWith({
@@ -32,6 +35,7 @@ class CheckGenderState extends Equatable {
     bool? isValidInput,
     String? resultGender,
     bool? isValidGender,
+    bool? isInitial,
   }) =>
       CheckGenderState(
         name: name ?? this.name,
@@ -40,6 +44,7 @@ class CheckGenderState extends Equatable {
         isValidInput: isValidInput ?? this.isValidInput,
         resultGender: resultGender ?? this.resultGender,
         isValidGender: isValidGender ?? this.isValidGender,
+        isInitial: isInitial ?? this.isInitial,
       );
 
   @override
@@ -50,5 +55,6 @@ class CheckGenderState extends Equatable {
         resultGender,
         isValidInput,
         isValidGender,
+        isInitial,
       ];
 }

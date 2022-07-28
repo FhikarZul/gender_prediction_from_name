@@ -3,8 +3,12 @@ import 'package:gender_prediction/data/datasource/flexible/history_local_data_so
 import 'package:gender_prediction/data/datasource/flexible/user_local_data_source.dart';
 import 'package:gender_prediction/data/datasource/remote/gender_remote_data_source.dart';
 import 'package:gender_prediction/data/repository/gender_repository_impl.dart';
+import 'package:gender_prediction/data/repository/history_repository_impl.dart';
 import 'package:gender_prediction/domain/repository/gender_repository.dart';
+import 'package:gender_prediction/domain/repository/history_repository.dart';
 import 'package:gender_prediction/domain/usercase/check_gender_usecase.dart';
+import 'package:gender_prediction/domain/usercase/insert_history_usecase.dart';
+import 'package:gender_prediction/domain/usercase/sync_usecase.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 
@@ -32,9 +36,18 @@ void initInjection() {
 
   //repository
   locator.registerSingleton<IGenderRepository>(
-    GenderRepository(remoteDataSource: locator.get()),
+    GenderRepositoryImpl(remoteDataSource: locator.get()),
+  );
+  locator.registerSingleton<IHistoryRepository>(
+    HistoryRepositoryImpl(
+        historyLocalDataSource: locator.get(),
+        userLocalDataSource: locator.get()),
   );
 
   //use case
   locator.registerFactory(() => CheckGenderUseCase(repository: locator.get()));
+  locator.registerFactory(() => SyncUseCase(repository: locator.get()));
+  locator.registerFactory(
+    () => InsertHistoryUseCase(repository: locator.get()),
+  );
 }

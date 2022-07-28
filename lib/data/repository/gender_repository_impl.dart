@@ -3,10 +3,10 @@ import 'package:gender_prediction/domain/model/result_domain.dart';
 import 'package:dartz/dartz.dart';
 import 'package:gender_prediction/domain/repository/gender_repository.dart';
 
-class GenderRepository extends IGenderRepository {
+class GenderRepositoryImpl extends IGenderRepository {
   final IGenderRemoteDataSource remoteDataSource;
 
-  GenderRepository({required this.remoteDataSource});
+  GenderRepositoryImpl({required this.remoteDataSource});
 
   @override
   Future<Either<Exception, ResultDomain>> checkGender({
