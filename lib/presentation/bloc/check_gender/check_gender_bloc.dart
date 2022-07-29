@@ -27,6 +27,11 @@ class CheckGenderBloc extends Bloc<CheckGenderEvent, CheckGenderState> {
     });
 
     on<CheckGenderEventInput>((event, emit) {
+      if (RegExp(r"\s").hasMatch(event.name)) {
+        emit(state.copyWith(isValidInput: false));
+        return;
+      }
+
       if (event.name.isEmpty) {
         emit(state.copyWith(isValidInput: false));
         return;
@@ -40,7 +45,7 @@ class CheckGenderBloc extends Bloc<CheckGenderEvent, CheckGenderState> {
     });
 
     on<CheckGenderEventSubmit>((event, emit) async {
-      emit(state.copyWith(isLoading: true));
+      emit(state.copyWith(isLoading: true, isInitial: false));
 
       final result = await checkGenderUseCase.execute(
         name: state.name,
@@ -52,6 +57,7 @@ class CheckGenderBloc extends Bloc<CheckGenderEvent, CheckGenderState> {
             isSuccess: false,
             isLoading: false,
             isValidGender: false,
+            isValidInput: true,
           ));
 
           emit(state.copyWith(isValidGender: true));
@@ -62,9 +68,11 @@ class CheckGenderBloc extends Bloc<CheckGenderEvent, CheckGenderState> {
               isSuccess: true,
               resultGender: result.gender,
               isLoading: false,
+              isValidInput: true,
             ),
           );
-          emit(state.copyWith(isSuccess: false, isLoading: false));
+          emit(state.copyWith(
+              isSuccess: false, isLoading: false, isValidInput: true));
         },
       );
 

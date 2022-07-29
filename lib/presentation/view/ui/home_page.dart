@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gender_prediction/injection.dart';
 import 'package:gender_prediction/presentation/bloc/check_gender/check_gender_bloc.dart';
 import 'package:gender_prediction/presentation/view/ui/gender_not_found.dart';
+import 'package:gender_prediction/presentation/view/ui/populer_page.dart';
 import 'package:gender_prediction/presentation/view/ui/result_page.dart';
 import 'package:gender_prediction/presentation/view/widget/custom_button.dart';
 import 'package:gender_prediction/presentation/view/widget/custom_textfield.dart';
@@ -68,7 +69,7 @@ class HomePage extends StatelessWidget {
                               SizedBox(
                                 width: 300,
                                 child: CustomTextField(
-                                  hintText: 'Masukkan Nama',
+                                  hintText: 'Masukkan Nama Pendek',
                                   onChanged: (value) => context
                                       .read<CheckGenderBloc>()
                                       .add(CheckGenderEventInput(name: value)),
@@ -76,9 +77,12 @@ class HomePage extends StatelessWidget {
                                 ),
                               ),
                               !state.isValidInput
-                                  ? const Text(
-                                      'Nama tidak boleh kosong!',
-                                      style: TextStyle(color: Colors.red),
+                                  ? const Padding(
+                                      padding: EdgeInsets.only(top: 20),
+                                      child: Text(
+                                        'Masukkan nama yang benar!',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
                                     )
                                   : const SizedBox(),
                               const SizedBox(height: 20),
@@ -94,6 +98,21 @@ class HomePage extends StatelessWidget {
                                       ),
                                     )
                                   : const SizedBox(),
+                              SizedBox(
+                                width: 300,
+                                child: CustomButton(
+                                    label: 'Pencarian Populer',
+                                    colors: Colors.orange,
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: ((context) =>
+                                                const PopulerPage())),
+                                      );
+                                    }),
+                              ),
+                              const SizedBox(height: 20),
                             ],
                           ),
                         ),

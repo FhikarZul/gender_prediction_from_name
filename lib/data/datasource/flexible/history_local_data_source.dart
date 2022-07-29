@@ -1,17 +1,21 @@
 import 'package:gender_prediction/data/datasource/flexible/app_config.dart';
 import 'package:gender_prediction/data/datasource/flexible/dao/history.dart';
+import 'package:gender_prediction/data/model/history_model.dart';
 import 'package:realm/realm.dart';
 
 abstract class IHistoryLocalDataSource {
   Future<void> synced({
     required User user,
   });
+
   Future<void> setHistory({
     required String id,
     required String nameSearched,
     required DateTime dateTime,
     required User user,
   });
+
+  Future<List<HistoryModel>> getHistory({required User user});
 }
 
 class HistoryLocalDataSource extends IHistoryLocalDataSource {
@@ -62,6 +66,26 @@ class HistoryLocalDataSource extends IHistoryLocalDataSource {
       await realm.subscriptions.waitForSynchronization();
     } catch (e) {
       throw Exception('failed to synchronization [$e]');
+    }
+  }
+
+  @override
+  Future<List<HistoryModel>> getHistory({required User user}) async {
+    try {
+      final realm = await appConfig.getRealmInstance(user: user);
+
+      final result = realm.all<History>();
+
+      return result
+          .map((e) => HistoryModel(
+                id: e.id,
+                dateTime: e.dateTime,
+                nameSearched: e.nameSearched,
+                uuidUser: e.uuidUser,
+              ))
+          .toList();
+    } catch (e) {
+      throw (Exception('failed to get history [$e]'));
     }
   }
 }
